@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .font-receipt {
+    font-family: var(--font-space-mono), monospace;
+  }
+}
+
+@keyframes receiptPrint {
+  0% {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(-20px);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+  }
+}
+
+.animate-receipt-print {
+  animation: receiptPrint 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
