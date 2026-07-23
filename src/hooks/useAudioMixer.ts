@@ -2,24 +2,27 @@ import { useEffect, useRef, useState } from 'react';
 
 export type SoundType = 'rain' | 'drip' | 'cafe';
 
-interface SoundConfig {
+export interface SoundConfig {
   id: SoundType;
   label: string;
   src: string;
+  maxVolume?: number;
 }
 
 export const SOUND_LIST: SoundConfig[] = [
-  { id: 'rain', label: '빗소리', src: '/audio/rain.mp3' },
-  { id: 'drip', label: '드립 커피', src: '/audio/drip.mp3' },
-  { id: 'cafe', label: '카페 소음', src: '/audio/cafe.mp3' },
+  { id: 'rain', label: '빗소리', src: '/audio/rain.mp3', maxVolume: 1 },
+  { id: 'drip', label: '드립 커피', src: '/audio/drip.mp3', maxVolume: 1 },
+  { id: 'cafe', label: '카페 소음', src: '/audio/cafe.mp3', maxVolume: 2 },
 ];
 
 export function useAudioMixer() {
   const [isPlaying, setIsPlaying] = useState(false);
+  
+  // 요청하신 비율 반영 (빗소리 1/4 = 0.125, 카페 소음 2배 = 0.8)
   const [volumes, setVolumes] = useState<Record<SoundType, number>>({
-    rain: 0.5,
+    rain: 0.125,
     drip: 0.3,
-    cafe: 0.4,
+    cafe: 0.8,
   });
 
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -27,7 +30,9 @@ export function useAudioMixer() {
   const gainNodesRef = useRef<Map<SoundType, GainNode>>(new Map());
 
   useEffect(() => {
-    const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     const ctx = new AudioContextClass();
     audioCtxRef.current = ctx;
 

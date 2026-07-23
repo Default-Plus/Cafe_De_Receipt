@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useAudioMixer, SOUND_LIST, SoundType } from '@/hooks/useAudioMixer';
+import { useAudioMixer, SOUND_LIST, SoundType, SoundConfig } from '@/hooks/useAudioMixer';
 
 export default function SoundMixer() {
   const { isPlaying, volumes, togglePlay, changeVolume } = useAudioMixer();
@@ -17,7 +17,7 @@ export default function SoundMixer() {
         </p>
 
         <div className="space-y-6">
-          {SOUND_LIST.map(({ id, label, maxVolume = 1 }) => (
+          {SOUND_LIST.map(({ id, label, maxVolume = 1 }: SoundConfig) => (
             <div key={id} className="space-y-2">
               <div className="flex justify-between text-sm font-medium">
                 <span>{label}</span>
